@@ -11,6 +11,9 @@ exports.up = function (knex, Promise) {
 
 exports.down = function (knex, Promise) {
   return Promise.all([
-    knex.schema.dropTableIfExists('milestones')
+    knex.schema.alterTable('milestones', table => {
+      table.dropForeign('famous_person_id');
+      table.dropColumn('famous_person_id');
+    })
   ]);
 };

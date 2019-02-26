@@ -1,4 +1,5 @@
 const settings = require("./settings"); // settings.json
+const add = require("./add_person");
 const myName = process.argv.slice(2)[0];
 
 const knex = require("knex")({
@@ -7,7 +8,9 @@ const knex = require("knex")({
     host: settings.hostname,
     user: settings.user,
     password: settings.password,
-    database: settings.database
+    database: settings.database,
+    port: settings.port,
+    ssl: settings.ssl
   }
 });
 
@@ -24,9 +27,16 @@ function foundOutput(myObj, name) {
   return foundStr;
 
 };
+
 knex.select('*').from('famous_people').where({
   'first_name': myName
 }).asCallback(function (err, rows) {
   if (err) return console.error(err);
   console.log(foundOutput(rows, myName));
+  knex.destroy();
 });
+
+
+
+
+
